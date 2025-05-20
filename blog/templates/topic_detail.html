@@ -1,0 +1,42 @@
+<h1 class="text-2xl font-bold">{{ topic.title }}</h1>
+<div class="text-sm text-gray-600">Posted on {{ topic.created_at|date:"M d, Y" }}</div>
+
+<div class="my-4">
+  {{ topic.content|safe }}
+</div>
+<div class="container">
+  <div class="flex gap-4">
+  <form action="{% url 'blog:topic_vote' topic.slug 'up' %}" method="post">
+    {% csrf_token %}
+    <button class="text-green-600">👍</button>
+  </form>
+  <form action="{% url 'blog:topic_vote' topic.slug 'down' %}" method="post">
+    {% csrf_token %}
+    <button class="text-red-600">👎</button>
+  </form>
+  <span>Score: {{ topic.vote_score }}</span>
+  </div>
+</div>
+
+<hr class="my-6" />
+
+<h2 class="text-xl font-bold">Comments</h2>
+<form action="{% url 'blog:add_comment' topic.slug %}" method="post" class="my-4">
+  {% csrf_token %}
+  {{ comment_form.text }}
+  <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
+</form>
+
+{% for comment in comments %}
+  <div class="p-2 border rounded my-2">
+    <p class="text-sm">{{ comment.user }} said on {{ comment.created_at|date:"M d, Y" }}</p>
+    <p>{{ comment.text }}</p>
+  </div>
+{% endfor %}
+
+{% if request.user == topic.user %}
+  <div class="mt-4 space-x-2">
+    <a href="{% url 'blog:topic_update' topic.slug %}" class="text-blue-600 hover:underline">✏️ Edit</a>
+    <a href="{% url 'blog:topic_delete' topic.slug %}" class="text-red-600 hover:underline">🗑️ Delete</a>
+  </div>
+{% endif %}
