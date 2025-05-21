@@ -1,29 +1,29 @@
-{% extends 'base.html' %}
+{% load static %}
 
-{% block content %}
-<div class="container my-6">
-    <h1 class="text-2xl font-bold mb-4">Topics</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tailwind + DaisyUI Test</title>
+  <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
+</head>
+<body class="bg-base-200 min-h-screen flex items-center justify-center">
 
-    <a href="{% url 'blog:topic_create' %}" class="btn btn-primary mb-4">➕ New Topic</a>
+  <div class="text-center space-y-6">
+    <h1 class="text-4xl font-bold text-primary">✅ Tailwind CSS is working!</h1>
 
-    {% for topic in topics %}
-        <div class="p-4 border rounded mb-4">
-            <h2 class="text-xl font-semibold">
-                <a href="{% url 'blog:topic_detail' topic.slug %}">{{ topic.title }}</a>
-            </h2>
-            <p class="text-sm text-gray-500">Posted on {{ topic.created_at|date:"M d, Y" }}</p>
+    <button class="btn btn-primary">DaisyUI Button</button>
 
-            {% if request.user == topic.user %}
-                <div class="mt-2 space-x-2">
-                    <a href="{% url 'blog:topic_update' topic.slug %}" class="text-blue-600 hover:underline">✏️ Edit</a>
-                    <a href="{% url 'blog:topic_delete' topic.slug %}" class="text-red-600 hover:underline">🗑️ Delete</a>
-                </div>
-            {% endif %}
+    <div class="card w-96 bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">DaisyUI Card</h2>
+        <p>If you can see this styled card, DaisyUI is working.</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-success">Success</button>
         </div>
-    {% empty %}
-        <p>No topics found.</p>
-    {% endfor %}
-</div>
+      </div>
+    </div>
+  </div>
 
-
-{% endblock %}
+</body>
+</html>
