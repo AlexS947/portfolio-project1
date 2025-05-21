@@ -129,3 +129,6 @@ def about_view(request):
 def all_topics_view(request):
     topics = Topic.objects.all().order_by('-created_at')  # or any order you prefer
     return render(request, 'topics.html', {'topics': topics})
+
+def test(request):
+    return render(request, 'test.html')

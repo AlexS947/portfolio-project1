@@ -127,7 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'portfolio/static/'
+    BASE_DIR / 'portfolio/static/',
+    BASE_DIR / 'theme' / 'static',
 ]
 
 STATIC_URL = '/static/'
@@ -142,6 +143,10 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
+
+TAILWIND_APP_NAME = "theme"
+TAILWIND_CSS_PATH = 'css/dist/styles.css'
 
 try:
     from .local_settings import *

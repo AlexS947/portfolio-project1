@@ -23,4 +23,5 @@ urlpatterns = [
     path('contact/thanks/', lambda request: render(request, 'contact_thanks.html'), name='contact_thanks'),
     path('about/', views.about_view, name='about'),
     path('topics/', views.all_topics_view, name='all_topics'),
+    path('test', views.test, name = 'test'),
 ]
