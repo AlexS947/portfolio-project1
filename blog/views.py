@@ -132,3 +132,9 @@ def all_topics_view(request):
 
 def test(request):
     return render(request, 'test.html')
+
+def wifi_coverage(request):
+    return render(request, 'wifi_coverage.html')
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')

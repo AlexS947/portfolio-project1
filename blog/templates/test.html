@@ -1,29 +1,61 @@
+{% extends 'base.html' %}
 {% load static %}
 
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Tailwind + DaisyUI Test</title>
-  <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
-</head>
-<body class="bg-base-200 min-h-screen flex items-center justify-center">
+    <main class="container mx-auto px-4 py-6">
+  <!-- Intro Section -->
+  <section class="bg-white p-6 rounded shadow-md text-center mb-8">
+    <h2 class="text-xl font-semibold mb-2">Have Your Say!!</h2>
+    <p class="text-sm mb-4">
+      With all the happenings in our country, good and bad, we have created a forum where you can discuss these matters with others in your community.
+    </p>
+    <a href="/topics">
+      <button class="bg-slate-900 text-white px-4 py-2 rounded flex items-center justify-center mx-auto">
+        Join the Discussion
+      </button>
+    </a>
+  </section>
 
-  <div class="text-center space-y-6">
-    <h1 class="text-4xl font-bold text-primary">✅ Tailwind CSS is working!</h1>
-
-    <button class="btn btn-primary">DaisyUI Button</button>
-
-    <div class="card w-96 bg-base-100 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title">DaisyUI Card</h2>
-        <p>If you can see this styled card, DaisyUI is working.</p>
-        <div class="card-actions justify-end">
-          <button class="btn btn-success">Success</button>
-        </div>
-      </div>
+  <!-- Most Recent Topics Section -->
+  <section class="mt-6">
+    <div class="w-full max-w-4xl mx-auto text-center">
+      <h2 class="text-xl font-semibold mb-4">Most Recent Topics</h2>
+      <table class="text-sm border bg-white rounded shadow text-left max-w-4xl w-full mx-auto">
+        <thead class="bg-gray-200">
+            <tr>
+            <th class="px-4 py-2">Topic Name</th>
+            <th class="px-4 py-2">Category</th>
+            <th class="px-4 py-2">Date Created</th>
+            <th class="px-4 py-2 text-center">Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-2">Title</td>
+                <td class="px-4 py-2"></td>
+                <td class="px-4 py-2"></td>
+                <td class="px-4 py-2 text-center">
+                    <a href="/topics/{{ topic.id }}/#comments">
+                    <svg class="w-4 h-4 inline text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+                        <path d="M256 32C114.6 32 0 125.1 0 240..." />
+                    </svg>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
+  </section>  
+    </main>
 
-</body>
+    <footer class="border-t mt-10 py-6 bg-white text-center text-sm text-gray-500">
+      <div class="mb-2">
+        <img src="{% static 'img/logo.png' %}" alt="Wifi News Logo" class="mx-auto h-5" />
+      </div>
+      <div>&copy; {{ now|date:"Y" }} Wifi News. All rights reserved. <a href="#" class="hover:underline">Privacy Policy</a></div>
+    </footer>
+  </body>
 </html>
+{% endblock %}
