@@ -17,7 +17,7 @@ urlpatterns = [
     path('api/topics/<slug:slug>/', api_views.TopicDetailAPI.as_view(), name='api_topic_detail'),
     path('api/topics/<slug:slug>/comments/', api_views.CommentListAPI.as_view(), name='api_topic_comments'),
 
-    path('test', views.test_view, name='test'),
+    path('/test', views.test_view, name='test'),
     path('news', views.news, name='news'),
     path('contact/', views.contact_view, name='contact'),
     path('contact/thanks/', lambda request: render(request, 'contact_thanks.html'), name='contact_thanks'),
