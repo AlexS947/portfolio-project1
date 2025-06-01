@@ -21,33 +21,36 @@
   <!-- Most Recent Topics Section -->
   <section class="mt-6">
     <div class="w-full max-w-4xl mx-auto text-center">
-      <h2 class="text-xl font-semibold mb-4">Most Recent Topics</h2>
-      <table class="text-sm border bg-white rounded shadow text-left max-w-4xl w-full mx-auto">
-        <thead class="bg-gray-200">
-            <tr>
-            <th class="px-4 py-2">Topic Name</th>
-            <th class="px-4 py-2">Category</th>
-            <th class="px-4 py-2">Date Created</th>
-            <th class="px-4 py-2 text-center">Comment</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="hover:bg-gray-50">
-                <td class="px-4 py-2">Title</td>
-                <td class="px-4 py-2"></td>
-                <td class="px-4 py-2"></td>
-                <td class="px-4 py-2 text-center">
-                    <a href="/topics/{{ topic.id }}/#comments">
-                    <svg class="w-4 h-4 inline text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
-                        <path d="M256 32C114.6 32 0 125.1 0 240..." />
-                    </svg>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-      </table>
+        <h2 class="text-xl font-semibold mb-4">Most Recent Topics</h2>
+        <table class="text-sm border bg-white rounded shadow text-left max-w-4xl w-full mx-auto">
+            <thead class="bg-gray-200">
+                <tr>
+                <th class="px-4 py-2">Topic Name</th>
+                <th class="px-4 py-2">Category</th>
+                <th class="px-4 py-2">Date Created</th>
+                <th class="px-4 py-2 text-center">Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for topic in topics %}
+                <tr class="hover:bg-gray-100 cursor-pointer" onclick="window.location.href='{% url 'topic_detail' topic.slug %}'">
+                    <td class="px-4 py-2">{{ topic.title }}</td>
+                    <td class="px-4 py-2">{{ topic.category.name }}</td>
+                    <td class="px-4 py-2">{{ topic.created_at|date:"Y-m-d" }}</td>
+                    <td class="px-4 py-2 text-center">
+                        <a href="{% url 'topic_detail' topic.id %}#comments" onclick="event.stopPropagation();">
+                            <svg class="w-4 h-4 inline text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+                                <path d="M256 32C114.6 32 0 125.1 0 240..." />
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-  </section>  
+  </section>
+  
     </main>
 
     <footer class="border-t mt-10 py-6 bg-white text-center text-sm text-gray-500">
