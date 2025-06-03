@@ -9,6 +9,8 @@ from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Q, Count
+from django.db import models
+
 
 def topic_list(request):
     query = request.GET.get('q')

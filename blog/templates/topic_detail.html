@@ -1,42 +1,62 @@
-<h1 class="text-2xl font-bold">{{ topic.title }}</h1>
-<div class="text-sm text-gray-600">Posted on {{ topic.created_at|date:"M d, Y" }}</div>
+{% extends 'base.html' %}
 
-<div class="my-4">
-  {{ topic.content|safe }}
-</div>
-<div class="container">
-  <div class="flex gap-4">
-  <form action="{% url 'blog:topic_vote' topic.slug 'up' %}" method="post">
+{% block content %}
+<div class="container mx-auto max-w-2xl mt-10">
+  <!-- Topic Header -->
+  <div class="flex justify-center mb-2">
+    <h1 class="text-2xl font-bold">{{ topic.title }}</h1>
+  </div>
+  <div class="text-center text-sm text-gray-600 mb-4">
+    Posted on {{ topic.created_at|date:"M d, Y" }}
+  </div>
+
+  <!-- Topic Content -->
+  <div class="my-6 text-left">
+    {{ topic.content|safe }}
+  </div>
+
+  <!-- Voting Section -->
+  <div class="flex justify-center items-center gap-4 mb-10">
+    <form action="{% url 'blog:topic_vote' topic.slug 'up' %}" method="post">
+      {% csrf_token %}
+      <button class="text-green-600 text-2xl" title="Upvote">👍</button>
+    </form>
+    <span class="text-lg font-semibold">Score: {{ topic.vote_score }}</span>
+    <form action="{% url 'blog:topic_vote' topic.slug 'down' %}" method="post">
+      {% csrf_token %}
+      <button class="text-red-600 text-2xl" title="Downvote">👎</button>
+    </form>
+  </div>
+
+  <hr class="my-6" />
+
+  <!-- Comments Header -->
+  <h2 class="text-xl font-bold mb-4 text-center">Comments</h2>
+
+  <form action="{% url 'blog:add_comment' topic.slug %}" method="post" class="mb-6">
     {% csrf_token %}
-    <button class="text-green-600">👍</button>
+    {{ comment_form.text }}
+    <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
   </form>
-  <form action="{% url 'blog:topic_vote' topic.slug 'down' %}" method="post">
-    {% csrf_token %}
-    <button class="text-red-600">👎</button>
-  </form>
-  <span>Score: {{ topic.vote_score }}</span>
+
+  <!-- Comment List -->
+  <div class="space-y-4">
+    {% for comment in comments %}
+      <div class="p-4 border rounded mx-auto max-w-md text-left">
+        <p class="text-sm font-semibold">{{ comment.user }} said on {{ comment.created_at|date:"M d, Y" }}</p>
+        <p>{{ comment.text }}</p>
+      </div>
+    {% empty %}
+      <p class="text-center text-gray-500">No comments yet.</p>
+    {% endfor %}
   </div>
+
+  <!-- Author Controls -->
+  {% if request.user == topic.author %}
+    <div class="mt-6 space-x-4 text-center">
+      <a href="{% url 'blog:topic_edit' topic.slug %}" class="text-blue-600 hover:underline">✏️ Edit</a>
+      <a href="{% url 'blog:topic_delete' topic.slug %}" class="text-red-600 hover:underline">🗑️ Delete</a>
+    </div>
+  {% endif %}
 </div>
-
-<hr class="my-6" />
-
-<h2 class="text-xl font-bold">Comments</h2>
-<form action="{% url 'blog:add_comment' topic.slug %}" method="post" class="my-4">
-  {% csrf_token %}
-  {{ comment_form.text }}
-  <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
-</form>
-
-{% for comment in comments %}
-  <div class="p-2 border rounded my-2">
-    <p class="text-sm">{{ comment.user }} said on {{ comment.created_at|date:"M d, Y" }}</p>
-    <p>{{ comment.text }}</p>
-  </div>
-{% endfor %}
-
-{% if request.user == topic.user %}
-  <div class="mt-4 space-x-2">
-    <a href="{% url 'blog:topic_update' topic.slug %}" class="text-blue-600 hover:underline">✏️ Edit</a>
-    <a href="{% url 'blog:topic_delete' topic.slug %}" class="text-red-600 hover:underline">🗑️ Delete</a>
-  </div>
-{% endif %}
+{% endblock %}
