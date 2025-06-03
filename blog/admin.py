@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Topic, Comment, Vote
+from .models import News, Category, Comment, Vote, Topic
 
 class TopicAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
@@ -8,6 +8,7 @@ class TopicAdmin(admin.ModelAdmin):
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(Comment)
 admin.site.register(Vote)
+admin.site.register(News)
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('user', 'topic', 'text', 'is_approved')

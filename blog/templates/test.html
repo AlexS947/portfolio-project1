@@ -33,12 +33,12 @@
             </thead>
             <tbody>
                 {% for topic in topics %}
-                <tr class="hover:bg-gray-100 cursor-pointer" onclick="window.location.href='{% url 'topic_detail' topic.slug %}'">
+                <tr class="hover:bg-gray-100 cursor-pointer" onclick="window.location.href='{% url 'blog:topic_detail' topic.slug %}'">
                     <td class="px-4 py-2">{{ topic.title }}</td>
                     <td class="px-4 py-2">{{ topic.category.name }}</td>
                     <td class="px-4 py-2">{{ topic.created_at|date:"Y-m-d" }}</td>
                     <td class="px-4 py-2 text-center">
-                        <a href="{% url 'topic_detail' topic.id %}#comments" onclick="event.stopPropagation();">
+                        <a href="{% url 'blog:topic_detail' topic.id %}#comments" onclick="event.stopPropagation();">
                             <svg class="w-4 h-4 inline text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
                                 <path d="M256 32C114.6 32 0 125.1 0 240..." />
                             </svg>

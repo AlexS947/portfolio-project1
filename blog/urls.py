@@ -13,12 +13,15 @@ urlpatterns = [
     path('topic/<slug:slug>/comment/', views.add_comment, name='add_comment'),
     path('topic/<slug:slug>/vote/<str:vote_type>/', views.topic_vote, name='topic_vote'),
     
+    path('news/<int:news_id>/', views.news_detail, name='news_detail'),
+    path('news/<int:news_id>/vote/<str:vote_type>/', views.news_vote, name='news_vote'),
+    
     path('api/topics/', api_views.TopicListAPI.as_view(), name='api_topic_list'),
     path('api/topics/<slug:slug>/', api_views.TopicDetailAPI.as_view(), name='api_topic_detail'),
     path('api/topics/<slug:slug>/comments/', api_views.CommentListAPI.as_view(), name='api_topic_comments'),
 
-    path('/test', views.test_view, name='test'),
-    path('news', views.news, name='news'),
+    path('test', views.test_view, name='test'),
+    path('news/', views.news, name='news'),
     path('contact/', views.contact_view, name='contact'),
     path('contact/thanks/', lambda request: render(request, 'contact_thanks.html'), name='contact_thanks'),
     path('about/', views.about_view, name='about'),

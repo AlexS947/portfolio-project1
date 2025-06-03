@@ -1,26 +1,61 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container text-center">
+<div class="container mt-5">
+  <h2 class="mb-4">Latest News</h2>
 
-  <h2 class="mb-4">News update</h2>
+  <!-- Sorting -->
+  <form method="get" class="mb-4">
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort" class="form-select w-auto d-inline-block" onchange="this.form.submit()">
+      <option value="date" {% if request.GET.sort == "date" %}selected{% endif %}>Newest First</option>
+      <option value="votes" {% if request.GET.sort == "votes" %}selected{% endif %}>Most Popular</option>
+    </select>
+  </form>
 
-  <div class="d-flex flex-wrap justify-content-center gap-4">
-    {% for topic in topics %}
+  <div class="d-flex flex-wrap gap-3">
+    {% for news in news_items %}
       <div class="card" style="width: 18rem;">
-        <img src="{{ topic.image_url }}" class="card-img-top" alt="{{ topic.title }}">
+        {% if news.image %}
+          <img src="{{ news.image.url }}" class="card-img-top" alt="{{ news.title }}">
+        {% else %}
+          <img src="https://via.placeholder.com/286x180?text=No+Image" class="card-img-top" alt="No image">
+        {% endif %}
         <div class="card-body">
-          <h5 class="card-title">{{ topic.title }}</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-          <a href="{% url 'blog:topic_detail' slug=topic.slug %}" class="btn btn-primary">Read more</a>
+          <h5 class="card-title">{{ news.title }}</h5>
+          <p class="card-text">{{ news.summary|truncatechars:100 }}</p>
+          
+          <!-- Vote and comment actions -->
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <form action="{% url 'blog:news_vote' news.id 'up' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-success">▲</button>
+              </form>
+              <form action="{% url 'blog:news_vote' news.id 'down' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-danger">▼</button>
+              </form>
+              <span class="ms-2">{{ news.vote_score }}</span>
+            </div>
+            <div>
+              <a href="{% url 'blog:news_detail' news.id %}#comments" class="text-decoration-none">
+                💬 {{ news.comments.count }}
+              </a>
+            </div>
+          </div>
+
+          <!-- Link to full news or external -->
+          {% if news.link %}
+            <a href="{{ news.link }}" class="btn btn-primary" target="_blank" rel="noopener">Read more</a>
+          {% else %}
+            <a href="#" class="btn btn-primary disabled" tabindex="-1" aria-disabled="true">No link</a>
+          {% endif %}
         </div>
       </div>
+    {% empty %}
+      <p>No news available.</p>
     {% endfor %}
   </div>
-
-  <footer class="mt-5 text-muted">
-    &copy; {{ now|date:"Y" }} WifiNews. All rights reserved.
-  </footer>
-
 </div>
 {% endblock %}

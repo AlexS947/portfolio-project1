@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Topic, Vote
+from .models import Topic, Vote, Category, News, NewsVote
 from .forms import TopicForm, CommentForm
 from django.contrib import messages
 from django.shortcuts import render
@@ -8,10 +8,27 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.db.models import Q, Count
 
 def topic_list(request):
-    topics = Topic.objects.order_by('-created_at')
-    return render(request, 'topic_list.html', {'topics': topics})
+    query = request.GET.get('q')
+    category_id = request.GET.get('category')
+
+    topics = Topic.objects.all()
+
+    if query:
+        topics = topics.filter(Q(title__icontains=query))
+
+    if category_id:
+        topics = topics.filter(category__id=category_id)
+
+    topics = topics.order_by('-created_at')
+    categories = Category.objects.all()
+
+    return render(request, 'topic_list.html', {
+        'topics': topics,
+        'categories': categories
+    })
 
 def topic_detail(request, slug):
     topic = get_object_or_404(Topic, slug=slug)
@@ -103,9 +120,43 @@ def test_view(request):
     topics = Topic.objects.order_by('-created_at')
     return render(request, 'test.html', {'topics': topics})
 
+
+@login_required
+def news_vote(request, news_id, vote_type):
+    news = get_object_or_404(News, id=news_id)
+
+    is_upvote = vote_type == 'up'
+    vote, created = NewsVote.objects.get_or_create(
+        user=request.user,
+        news=news,
+        defaults={'is_upvote': is_upvote}
+    )
+
+    # If the vote already exists, update it
+    if not created:
+        vote.is_upvote = is_upvote
+        vote.save()
+
+    return redirect('blog:news')
+
+
 def news(request):
-    topics = Topic.objects.order_by('-created_at')
-    return render(request, 'news.html', {'topics': topics})
+    sort = request.GET.get('sort', 'date')
+    if sort == 'votes':
+        news_items = News.objects.annotate(
+            vote_score=Count('votes', filter=models.Q(votes__is_upvote=True)) -
+                       Count('votes', filter=models.Q(votes__is_upvote=False))
+        ).order_by('-vote_score', '-created_at')
+    else:
+        news_items = News.objects.order_by('-created_at')
+
+    return render(request, 'news.html', {'news_items': news_items})
+
+
+def news_detail(request, news_id):
+    news = get_object_or_404(News, id=news_id)
+    return render(request, 'news_detail.html', {'news': news})
+
 
 def contact_view(request):
     if request.method == 'POST':

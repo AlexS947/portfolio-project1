@@ -151,7 +151,7 @@ TAILWIND_CSS_PATH = 'css/dist/styles.css'
 
 try:
     from .local_settings import *
-    print("local_settings.py loaded successfully.")
 except ImportError:
-    print("local_settings.py not found.")
+    pass
+
 

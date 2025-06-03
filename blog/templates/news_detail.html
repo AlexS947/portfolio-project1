@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>{{ news.title }}</h2>
+  {% if news.image %}
+    <img src="{{ news.image.url }}" class="img-fluid mb-3" alt="{{ news.title }}">
+  {% endif %}
+  <p>{{ news.summary }}</p>
+  {% if news.link %}
+    <a href="{{ news.link }}" class="btn btn-primary" target="_blank">Read full story</a>
+  {% endif %}
+</div>
+{% endblock %}
