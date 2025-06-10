@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-  <h2 class="mb-4">Latest News</h2>
+<div class="max-w-7xl mx-auto mt-10 px-4 text-center">
+  <h2 class="text-3xl font-semibold mb-6">Latest News</h2>
 
-  <form method="get" class="mb-4 d-flex flex-wrap gap-3 align-items-center">
+  <!-- Filters -->
+  <form method="get" class="mb-8 flex flex-wrap justify-center items-center gap-4">
     <!-- Category Filter -->
     <div>
-      <label for="category">Category:</label>
-      <select name="category" id="category" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+      <label for="category" class="mr-2 font-medium">Category:</label>
+      <select name="category" id="category" onchange="this.form.submit()" class="border border-gray-300 rounded px-3 py-1">
         <option value="">All</option>
         {% for cat in categories %}
           <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
@@ -20,57 +21,57 @@
 
     <!-- Sort Dropdown -->
     <div>
-      <label for="sort">Sort by:</label>
-      <select name="sort" id="sort" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+      <label for="sort" class="mr-2 font-medium">Sort by:</label>
+      <select name="sort" id="sort" onchange="this.form.submit()" class="border border-gray-300 rounded px-3 py-1">
         <option value="date" {% if request.GET.sort == "date" %}selected{% endif %}>Newest First</option>
         <option value="votes" {% if request.GET.sort == "votes" %}selected{% endif %}>Most Popular</option>
       </select>
     </div>
   </form>
 
-
-  <div class="d-flex flex-wrap gap-3">
+  <!-- News Cards -->
+  <div class="mt-10 flex flex-wrap justify-center gap-6">
     {% for news in news_items %}
-      <div class="card" style="width: 18rem;">
+      <div class="bg-white shadow-md rounded-lg overflow-hidden w-72">
         {% if news.image %}
-          <img src="{{ news.image.url }}" class="card-img-top" alt="{{ news.title }}">
+          <img src="{{ news.image.url }}" class="w-full h-48 object-cover" alt="{{ news.title }}">
         {% else %}
-          <img src="https://via.placeholder.com/286x180?text=No+Image" class="card-img-top" alt="No image">
+          <img src="https://via.placeholder.com/286x180?text=No+Image" class="w-full h-48 object-cover" alt="No image">
         {% endif %}
-        <div class="card-body">
-          <h5 class="card-title">{{ news.title }}</h5>
-          <p class="card-text">{{ news.summary|truncatechars:100 }}</p>
+        <div class="p-4 text-left">
+          <h5 class="text-lg font-bold mb-2">{{ news.title }}</h5>
+          <p class="text-sm text-gray-700 mb-3">{{ news.summary|truncatechars:100 }}</p>
           
           <!-- Vote and comment actions -->
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <div>
-              <form action="{% url 'blog:news_vote' news.id 'up' %}" method="post" style="display: inline;">
+          <div class="flex justify-between items-center mb-3">
+            <div class="flex items-center space-x-2">
+              <form action="{% url 'blog:news_vote' news.id 'up' %}" method="post">
                 {% csrf_token %}
-                <button class="btn btn-sm btn-success">▲</button>
+                <button class="bg-green-500 text-white px-2 py-1 rounded text-sm hover:bg-green-600">▲</button>
               </form>
-              <form action="{% url 'blog:news_vote' news.id 'down' %}" method="post" style="display: inline;">
+              <form action="{% url 'blog:news_vote' news.id 'down' %}" method="post">
                 {% csrf_token %}
-                <button class="btn btn-sm btn-danger">▼</button>
+                <button class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">▼</button>
               </form>
-              <span class="ms-2">{{ news.vote_score }}</span>
+              <span class="text-sm">{{ news.vote_score }}</span>
             </div>
             <div>
-              <a href="{% url 'blog:news_detail' news.id %}#comments" class="text-decoration-none">
+              <a href="{% url 'blog:news_detail' news.id %}#comments" class="text-blue-600 text-sm hover:underline">
                 💬 {{ news.comments.count }}
               </a>
             </div>
           </div>
 
-          <!-- Link to full news or external -->
+          <!-- Read more button -->
           {% if news.link %}
-            <a href="{{ news.link }}" class="btn btn-primary" target="_blank" rel="noopener">Read more</a>
+            <a href="{{ news.link }}" class="block bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700" target="_blank" rel="noopener">Read more</a>
           {% else %}
-            <a href="#" class="btn btn-primary disabled" tabindex="-1" aria-disabled="true">No link</a>
+            <span class="block bg-gray-400 text-white text-center py-2 rounded cursor-not-allowed">No link</span>
           {% endif %}
         </div>
       </div>
     {% empty %}
-      <p>No news available.</p>
+      <p class="text-gray-500">No news available.</p>
     {% endfor %}
   </div>
 </div>
