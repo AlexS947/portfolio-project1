@@ -2,13 +2,61 @@
 
 {% block content %}
 <div class="container mt-5">
+  <!-- News Title -->
   <h2>{{ news.title }}</h2>
+
+  <!-- News Image -->
   {% if news.image %}
     <img src="{{ news.image.url }}" class="img-fluid mb-3" alt="{{ news.title }}">
   {% endif %}
+
+  <!-- Summary -->
   <p>{{ news.summary }}</p>
+
+  <!-- External Link -->
   {% if news.link %}
-    <a href="{{ news.link }}" class="btn btn-primary" target="_blank">Read full story</a>
+    <a href="{{ news.link }}" class="btn btn-primary mb-3" target="_blank">Read full story</a>
   {% endif %}
+
+  <!-- Voting Section -->
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <form action="{% url 'blog:news_vote' news.id 'up' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-outline-success">👍 Upvote</button>
+    </form>
+    <form action="{% url 'blog:news_vote' news.id 'down' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-outline-danger">👎 Downvote</button>
+    </form>
+  </div>
+
+  <!-- Comments Section -->
+  <div class="mt-5">
+    <h4>Comments</h4>
+
+    {% if comments %}
+      <ul class="list-group mb-4">
+        {% for comment in comments %}
+          <li class="list-group-item">
+            <strong>{{ comment.user.username }}</strong> ({{ comment.created_at|date:"Y-m-d H:i" }}):<br>
+            {{ comment.content }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">No comments yet.</p>
+    {% endif %}
+
+    <!-- Add Comment Form -->
+    {% if user.is_authenticated %}
+      <form method="post" class="mb-4">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit" class="btn btn-primary">Add Comment</button>
+      </form>
+    {% else %}
+      <p><a href="{% url 'login' %}">Log in</a> to leave a comment.</p>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

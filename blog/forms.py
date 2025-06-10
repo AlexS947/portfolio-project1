@@ -1,5 +1,5 @@
 from django import forms
-from .models import Topic, Comment
+from .models import Topic, Comment, NewsComment
 from tinymce.widgets import TinyMCE
 
 class TopicForm(forms.ModelForm):
@@ -19,4 +19,12 @@ class CommentForm(forms.ModelForm):
                 'rows': 4,
                 'placeholder': 'Write your comment here...',
             }),
+        }
+
+class NewsCommentForm(forms.ModelForm):
+    class Meta:
+        model = NewsComment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'})
         }
