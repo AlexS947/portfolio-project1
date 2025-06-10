@@ -4,14 +4,30 @@
 <div class="container mt-5">
   <h2 class="mb-4">Latest News</h2>
 
-  <!-- Sorting -->
-  <form method="get" class="mb-4">
-    <label for="sort">Sort by:</label>
-    <select name="sort" id="sort" class="form-select w-auto d-inline-block" onchange="this.form.submit()">
-      <option value="date" {% if request.GET.sort == "date" %}selected{% endif %}>Newest First</option>
-      <option value="votes" {% if request.GET.sort == "votes" %}selected{% endif %}>Most Popular</option>
-    </select>
+  <form method="get" class="mb-4 d-flex flex-wrap gap-3 align-items-center">
+    <!-- Category Filter -->
+    <div>
+      <label for="category">Category:</label>
+      <select name="category" id="category" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+        <option value="">All</option>
+        {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+            {{ cat.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Sort Dropdown -->
+    <div>
+      <label for="sort">Sort by:</label>
+      <select name="sort" id="sort" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+        <option value="date" {% if request.GET.sort == "date" %}selected{% endif %}>Newest First</option>
+        <option value="votes" {% if request.GET.sort == "votes" %}selected{% endif %}>Most Popular</option>
+      </select>
+    </div>
   </form>
+
 
   <div class="d-flex flex-wrap gap-3">
     {% for news in news_items %}

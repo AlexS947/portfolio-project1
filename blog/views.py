@@ -164,15 +164,27 @@ def add_news_comment(request, news_id):
 
 def news(request):
     sort = request.GET.get('sort', 'date')
+    category_id = request.GET.get('category')
+
+    news_items = News.objects.all()
+
+    if category_id:
+        news_items = news_items.filter(category_id=category_id)
+
     if sort == 'votes':
-        news_items = News.objects.annotate(
-            vote_score=Count('votes', filter=models.Q(votes__is_upvote=True)) -
-                       Count('votes', filter=models.Q(votes__is_upvote=False))
+        news_items = news_items.annotate(
+            vote_score=Count('votes', filter=Q(votes__is_upvote=True)) -
+                        Count('votes', filter=Q(votes__is_upvote=False))
         ).order_by('-vote_score', '-created_at')
     else:
-        news_items = News.objects.order_by('-created_at')
+        news_items = news_items.order_by('-created_at')
 
-    return render(request, 'news.html', {'news_items': news_items})
+    categories = Category.objects.all()
+
+    return render(request, 'news.html', {
+        'news_items': news_items,
+        'categories': categories,
+    })
 
 
 def news_detail(request, news_id):

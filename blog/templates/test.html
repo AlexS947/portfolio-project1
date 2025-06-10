@@ -46,27 +46,39 @@
 
   <!-- Most Recent Topics Section -->
   <section class="mb-12">
-    <div class="max-w-4xl mx-auto text-center">
+    <div class="w-full max-w-7xl mx-auto px-4 text-center">
       <h2 class="text-xl font-semibold mb-4">Most Recent Topics</h2>
       <div class="overflow-x-auto">
-        <table class="text-sm border bg-white rounded-lg shadow w-full text-left">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="px-4 py-3 font-medium text-gray-700">Topic Name</th>
-              <th class="px-4 py-3 font-medium text-gray-700">Category</th>
-              <th class="px-4 py-3 font-medium text-gray-700">Date Created</th>
-              <th class="px-4 py-3 font-medium text-center text-gray-700">Comment</th>
+        <table class="w-full table-fixed border-collapse bg-white rounded-lg shadow">
+          <thead class="sticky top-0 z-10">
+            <tr class="bg-gray-200">
+              <th class="min-w-[300px] border-b border-gray-300 px-4 py-3 text-left text-sm font-semibold text-gray-700">Topic Name</th>
+              <th class="w-1/4 border-b border-gray-300 px-4 py-3 text-left text-sm font-semibold text-gray-700">Category</th>
+              <th class="w-1/4 border-b border-gray-300 px-4 py-3 text-left text-sm font-semibold text-gray-700">Date Created</th>
+              <th class="w-[100px] border-b border-gray-300 px-4 py-3 text-center text-sm font-semibold text-gray-700">Comments</th>
+              <th class="sticky right-0 border-b border-gray-300 bg-black px-4 py-3 text-center text-sm font-semibold text-white">Go</th>
             </tr>
           </thead>
           <tbody>
             {% for topic in topics %}
-            <tr class="hover:bg-gray-50 transition cursor-pointer" onclick="window.location.href='{% url 'blog:topic_detail' topic.slug %}'">
-              <td class="px-4 py-2">{{ topic.title }}</td>
-              <td class="px-4 py-2">{{ topic.category.name }}</td>
-              <td class="px-4 py-2">{{ topic.created_at|date:"Y-m-d" }}</td>
-              <td class="px-4 py-2 text-center">
+            <tr class="cursor-pointer transition-colors duration-200 hover:bg-gray-100"
+                onclick="window.location.href='{% url 'blog:topic_detail' topic.slug %}'">
+              <td class="border-b border-gray-300 px-4 py-3 text-sm text-gray-800 max-w-[250px] overflow-hidden text-ellipsis whitespace-nowrap">
+                {{ topic.title }}
+              </td>
+              <td class="border-b border-gray-300 px-4 py-3 text-sm text-gray-800">
+                {{ topic.category.name }}
+              </td>
+              <td class="border-b border-gray-300 px-4 py-3 text-sm text-gray-800">
+                {{ topic.created_at|date:"Y/m/d" }}
+              </td>
+              <td class="border-b border-gray-300 px-4 py-3 text-sm text-center text-gray-800">
+                {{ topic.approved_comments.count }}
+              </td>
+              <td class="sticky right-0 border-b border-gray-300 bg-black px-4 py-3 text-center">
                 <a href="{% url 'blog:topic_detail' topic.slug %}#comments" onclick="event.stopPropagation();">
-                  <svg class="w-4 h-4 text-black inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+                  <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512"
+                      class="mx-auto text-sm text-white" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                     <path d="M256 32C114.6 32 0 125.1 0 240..." />
                   </svg>
                 </a>
@@ -78,6 +90,7 @@
       </div>
     </div>
   </section>
+
 
 
   <!-- Most Recent Highlights Section -->
