@@ -181,9 +181,12 @@ def news(request):
 
     categories = Category.objects.all()
 
+    featured_articles, recent_articles = get_news_widget_data()
     return render(request, 'news.html', {
         'news_items': news_items,
         'categories': categories,
+        'featured_articles': featured_articles,
+        'recent_articles': recent_articles,
     })
 
 
@@ -277,3 +280,20 @@ def privacy_policy(request):
 
 def base(request):
     return render(request, 'base.html', {'now': now()})
+
+def get_news_widget_data():
+    featured_articles = (
+        News.objects.annotate(
+            upvotes=Count('votes', filter=Q(votes__is_upvote=True)),
+            downvotes=Count('votes', filter=Q(votes__is_upvote=False)),
+        )
+        .annotate(score=models.F('upvotes') - models.F('downvotes'))
+        .order_by('-score', '-created_at')[:2]
+    )
+
+    recent_articles = (
+        News.objects.exclude(id__in=[n.id for n in featured_articles])
+        .order_by('-created_at')[:3]
+    )
+
+    return featured_articles, recent_articles
