@@ -1,0 +1,50 @@
+<div class="mb-2 text-center">
+  <div class="relative h-2 w-full bg-gray-200 rounded">
+    <div id="progressBar" class="absolute h-full bg-blue-600 rounded transition-all duration-1000" style="width: 0%;"></div>
+  </div>
+  <p class="mt-2 text-lg font-semibold text-gray-700">
+    View these ads for
+    <span id="timeLeftDisplay" class="text-xl font-bold text-gray-800">16</span> seconds
+  </p>
+</div>
+
+<div class="mb-2 flex justify-center">
+  <a
+    href="/interstitial"
+    id="connectButton"
+    class="hidden items-center rounded-lg bg-slate-950 px-6 py-3 font-medium text-white focus:outline-none lg:px-10"
+  >
+    <i class="mr-2">&#x1F4F6;</i> Connect Now
+  </a>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const totalTime = 16;
+    const timeLeftDisplay = document.getElementById("timeLeftDisplay");
+    const connectButton = document.getElementById("connectButton");
+    const progressBar = document.getElementById("progressBar");
+
+    let timeLeft = totalTime;
+
+    const updateTimer = () => {
+      timeLeft--;
+      timeLeftDisplay.textContent = timeLeft;
+      progressBar.style.width = `${((totalTime - timeLeft) / totalTime) * 100}%`;
+
+      if (timeLeft <= 8) {
+        connectButton.classList.remove("hidden");
+        connectButton.classList.add("flex");
+      }
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        window.location.href = "/interstitial";  // Add UTM if needed
+      }
+    };
+
+    timeLeftDisplay.textContent = totalTime;
+    progressBar.style.width = "0%";
+    const timer = setInterval(updateTimer, 1000);
+  });
+</script>

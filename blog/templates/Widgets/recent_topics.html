@@ -1,0 +1,48 @@
+<div class="overflow-hidden rounded-md shadow">
+  <div class="overflow-x-auto">
+    <table class="min-w-full table-fixed border-collapse bg-white">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="min-w-[250px] border-b border-gray-300 px-3 py-2 text-left text-xs font-semibold text-gray-700">
+            Topic Name
+          </th>
+          <th class="w-1/4 border-b border-gray-300 px-3 py-2 text-left text-xs font-semibold text-gray-700">
+            Category
+          </th>
+          <th class="w-1/4 border-b border-gray-300 px-3 py-2 text-left text-xs font-semibold text-gray-700">
+            Date Created
+          </th>
+          <th class="sticky right-0 border-b border-gray-300 bg-black px-3 py-2 text-center text-xs font-semibold text-white">
+            Comment
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if topics %}
+          {% for topic in topics %}
+            <tr class="cursor-pointer transition-colors duration-200 hover:bg-gray-100" onclick="window.location.href='{% url 'blog:topic_detail' slug=topic.slug %}'">
+              <td class="border-b border-gray-300 px-3 py-3 text-xs text-gray-800 {% if topic.title|length > 40 %}max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap{% endif %}">
+                {{ topic.title }}
+              </td>
+              <td class="border-b border-gray-300 px-3 py-3 text-xs text-gray-800">
+                {{ topic.category.name }}
+              </td>
+              <td class="border-b border-gray-300 px-3 py-3 text-xs text-gray-800">
+                {{ topic.created_at|date:"M d, Y" }}
+              </td>
+              <td class="sticky right-0 border-b border-gray-300 bg-black px-3 py-3 text-center">
+                <i class="text-white text-sm">&#x1F4AC;</i> {# Comment icon fallback #}
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="4" class="px-3 py-3 text-center text-gray-500">
+              No recent topics found.
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>

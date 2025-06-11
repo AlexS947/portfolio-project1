@@ -8,7 +8,7 @@ app_name = 'blog'
 
 urlpatterns = [
     path('', views.test_view, name='test_view'),
-    path('topics/', views.topic_list, name='topic_list'),
+    path('topics', views.topic_list, name='topic_list'),
     path('topic/new/', views.topic_create, name='topic_create'),
     path('topic/<slug:slug>/', views.topic_detail, name='topic_detail'),
     path('topic/<slug:slug>/edit/', views.edit_topic, name='topic_edit'),
@@ -27,7 +27,7 @@ urlpatterns = [
     path('contact/', views.contact_view, name='contact'),
     path('contact/thanks/', lambda request: render(request, 'contact_thanks.html'), name='contact_thanks'),
     path('about/', views.about_view, name='about'),
-    path('topics', views.all_topics_view, name='all_topics'),
+    path('topics/', views.all_topics_view, name='all_topics'),
     path('wifi_coverage', views.wifi_coverage, name='wifi_coverage'),
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
 ] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0]) \
