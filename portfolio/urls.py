@@ -7,8 +7,7 @@ from blog import views as blog_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', blog_views.test_view, name='home'),
-    path('blog/', include('blog.urls', namespace='blog')),
+    path('', include('blog.urls', namespace='blog')),
     path('tinymce/', include('tinymce.urls')),
 ]
 
