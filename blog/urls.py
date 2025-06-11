@@ -30,5 +30,6 @@ urlpatterns = [
     path('topics/', views.all_topics_view, name='all_topics'),
     path('wifi_coverage', views.wifi_coverage, name='wifi_coverage'),
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('interstitial/', views.interstitial_view, name='interstitial'),
 ] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0]) \
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

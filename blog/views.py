@@ -297,3 +297,6 @@ def get_news_widget_data():
     )
 
     return featured_articles, recent_articles
+
+def interstitial_view(request):
+    return render(request, 'widgets/interstitial.html')
